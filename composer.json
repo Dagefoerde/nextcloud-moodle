@@ -1,0 +1,15 @@
+{
+    "name": "Moodle",
+    "description": "Administrative support for integrating Moodle with Nextcloud",
+    "type": "project",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "Jan Dageförde"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>moodle</id>
+    <name>Moodle</name>
+    <summary>Administrative support for integrating Moodle with Nextcloud</summary>
+    <description><![CDATA[This app helps administrators in configuring the Moodle-Nextcloud-Integration. It analyses the current configuration and raises warnings if something is amiss. Also it displays statistics of the &quot;System account&quot; configured for Moodle.]]></description>
+    <version>0.0.1</version>
+    <licence>agpl</licence>
+    <author mail="jan.dagefoerde@uni-muenster.de" homepage="https://github.com/Dagefoerde">Jan Dageförde</author>
+    <namespace>Moodle</namespace>
+    <category>integration</category>
+    <bugs>https://github.com/Dagefoerde/nextcloud-moodle/issues</bugs>
+    <dependencies>
+        <nextcloud min-version="14" max-version="14"/>
+    </dependencies>
+    <navigations>
+        <navigation>
+            <name>Moodle</name>
+            <route>moodle.page.index</route>
+        </navigation>
+    </navigations>
+</info>
