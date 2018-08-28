@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 
 use OCP\AppFramework\Http\TemplateResponse;
 
-use OCA\Moodle\Controller\PageController;
+use OCA\Moodle\Controller\CheckSetupController;
 
 
 class PageControllerTest extends PHPUnit_Framework_TestCase {
@@ -16,7 +16,7 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
 		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
-		$this->controller = new PageController(
+		$this->controller = new CheckSetupController(
 			'moodle', $request, $this->userId
 		);
 	}

@@ -70,7 +70,7 @@
 <path
    id="path17"
    d="M 62.4,70.2 V 47.4 c 0,-4.8 -2,-7.2 -5.9,-7.2 -3.9,0 -5.9,2.4 -5.9,7.2 V 70.2 H 38.9 V 47.4 c 0,-4.8 -1.9,-7.2 -5.8,-7.2 -3.9,0 -5.9,2.4 -5.9,7.2 V 70.2 H 15.6 V 46.1 c 0,-5 1.7,-8.7 5.2,-11.3 3,-2.3 7.2,-3.4 12.3,-3.4 5.3,0 9.1,1.3 11.6,4 2.1,-2.7 6,-4 11.7,-4 5.2,0 9.3,1.1 12.3,3.4 3.5,2.6 5.2,6.3 5.2,11.3 V 70.3 H 62.4 Z"
-   style="fill:#ffffff" />
+   style="fill:#000000" />
 <radialGradient
    gradientUnits="userSpaceOnUse"
    r="123.3347"
@@ -309,7 +309,7 @@
 <path
    id="path94"
    d="m 16.7,37.2 c -0.4,2 -0.8,4 -1.2,6 11,3.7 21.4,0.1 26.9,-9.5 -8.1,-5.6 -15.6,0.1 -25.7,3.5"
-   style="fill:#ffffff" />
+   style="fill:#000000" />
 <linearGradient
    y2="31.877001"
    x2="41.848598"
@@ -358,7 +358,7 @@
 <path
    id="path111"
    d="M 16.7,35.7 C 16.3,38 16,40.2 15.6,42.5 26.1,46.1 36.4,43 41.9,33.6 34.9,25.5 27.1,32.2 16.7,35.7"
-   style="fill:#ffffff" />
+   style="fill:#000000" />
 <linearGradient
    y2="38.683201"
    x2="31.5222"
@@ -387,7 +387,7 @@
 <path
    id="path118"
    d="m 29.2,38.4 c -4.8,-1 -10,1.5 -13.6,4.1 -2.3,-16.8 8.1,-16.4 21.7,-12.2 -0.9,4.1 -2.4,9.6 -5,12.9 -0.1,-2.2 -1.1,-3.7 -3.1,-4.8"
-   style="fill:#ffffff" />
+   style="fill:#000000" />
 <linearGradient
    y2="23.5879"
    x2="49.166"
@@ -436,25 +436,25 @@
 <path
    id="path135"
    d="M 1.2,35.7 C 18.8,25.1 28.7,23.1 49.2,21 25.4,39.8 24.8,35.7 1.2,35.7"
-   style="fill:#ffffff" />
+   style="fill:#000000" />
 <line
    id="line137"
    y2="34.799999"
    x2="30.299999"
    y1="21.1"
    x1="49.200001"
-   style="fill:#ffffff;stroke:#000000;stroke-width:0.5;stroke-opacity:1" />
+   style="fill:#000000;stroke:#ffffff;stroke-width:0.5;stroke-opacity:1" />
 <path
    id="path139"
    d="m 26.7,28.4 c 0.2,2.2 -0.3,-2.1 0,0"
-   style="opacity:0.23000004;fill:#ffffff" />
+   style="opacity:0.23000004;fill:#000000" />
 <line
    id="line141"
    y2="34.799999"
    x2="30.299999"
    y1="35.700001"
    x1="1.2"
-   style="fill:#ffffff;stroke:#000000;stroke-width:0.5;stroke-opacity:1" />
+   style="fill:#000000;stroke:#ffffff;stroke-width:0.5;stroke-opacity:1" />
 <path
    id="path143"
    d="M 24.9,28.6 C 12.9,31.9 -2.7,30.8 1.5,47"
@@ -466,17 +466,17 @@
 <path
    id="path147"
    d="M 24.9,28.6 C 19.9,30 3.5,33.6 3.3,35.7 2.8,39.6 3.2,45.8 3.2,45.8"
-   style="fill:#ffffff;stroke:#000000;stroke-width:0.5;stroke-opacity:1" />
+   style="fill:#000000;stroke:#ffffff;stroke-width:0.5;stroke-opacity:1" />
 <path
    id="path149"
    d="M 4.7,60.7 C 2.9,56.2 0.7,51.2 3.3,45 5,50.8 4.7,55.2 4.7,60.7"
-   style="fill:#ffffff" />
+   style="fill:#000000" />
 <ellipse
    id="ellipse151"
    ry="0.39999828"
    rx="0.79999655"
    cy="34.778053"
    cx="13.306223"
-   style="fill:#ffffff;stroke-width:0.99999571"
+   style="fill:#000000;stroke-width:0.99999571"
    transform="rotate(-19.609116)" />
 </svg>

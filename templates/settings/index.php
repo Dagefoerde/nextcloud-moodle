@@ -1,10 +1,6 @@
-<div id="app-settings">
-	<div id="app-settings-header">
-		<button class="settings-button"
-				data-apps-slide-toggle="#app-settings-content"
-		></button>
-	</div>
-	<div id="app-settings-content">
-		<!-- Your settings in here -->
-	</div>
+<?php
+script('moodle', 'checks');
+?>
+<div id="moodle" class="section">
+    <h2 class="inlineblock"><?php p($l->t('Moodle Integration')); ?></h2>
 </div>
