@@ -1,0 +1,13 @@
+#moodlechecks {
+    .loading {
+        height: 50px;
+        background-position: left center;
+    }
+    .errors, .warnings {
+        color: #ce3702;
+    }
+    li {
+        list-style: initial;
+        margin: 10px 0;
+    }
+}

@@ -22,7 +22,7 @@
  */
 namespace OCA\Moodle\Controller;
 
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
@@ -50,15 +50,19 @@ class CheckSetupController extends Controller {
 	}
 
     /**
-     * @return JSONResponse
+     * @return DataResponse
      */
     public function checkSupportsBearerToken() {
         if (isset($_SERVER['HTTP_AUTHENTICATION']) &&
             $_SERVER['HTTP_AUTHENTICATION'] === 'Bearer xyz') {
-            return new JSONResponse(true);
+            return new DataResponse([
+                'supportsBearerToken' => true,
+                ]);
         }
         // Bearer authentication token was not transmitted.
-        return new JSONResponse(false);
+        return new DataResponse([
+                'supportsBearerToken' => false,
+                ]);
     }
 
 }
