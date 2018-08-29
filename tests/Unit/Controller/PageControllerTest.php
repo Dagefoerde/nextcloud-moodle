@@ -21,11 +21,4 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		);
 	}
 
-	public function testIndex() {
-		$result = $this->controller->index();
-
-		$this->assertEquals('index', $result->getTemplateName());
-		$this->assertTrue($result instanceof TemplateResponse);
-	}
-
 }
