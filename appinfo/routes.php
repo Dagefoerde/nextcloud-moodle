@@ -9,6 +9,8 @@
  */
 return [
     'routes' => [
-       ['name' => 'CheckSetup#checkSupportsBearerToken', 'url' => '/settings/checksupportsbearertoken', 'verb' => 'GET'],
+        ['name' => 'CheckSetup#checkSupportsBearerToken', 'url' => '/settings/checksupportsbearertoken', 'verb' => 'GET'],
+        ['name' => 'SystemAccount#addSystemAccount', 'url' => '/settings/addsystemaccount', 'verb' => 'POST'],
+        ['name' => 'SystemAccount#removeSystemAccount', 'url' => '/settings/removesystemaccount', 'verb' => 'POST'],
     ]
 ];
