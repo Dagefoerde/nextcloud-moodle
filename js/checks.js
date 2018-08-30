@@ -88,7 +88,7 @@ $(document).ready(function() {
         if (xhr.status === 200 && data) {
             if (!data.supportsBearerToken) {
                 messages.push({
-                    msg: t('moodle', 'Bearer authentication token was not received. Likely, mod_headers is missing or misconfigured.'),
+                    msg: t('moodle', 'Bearer authentication token was not received. Likely, <code>mod_headers</code> is missing or misconfigured.'),
                     type: 'error'
                 });
             }
