@@ -129,6 +129,11 @@ export default {
     },
 	methods: {
 		deleteAccount(id) {
+		    if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+		        OC.PasswordConfirmation.requirePasswordConfirmation(() => this.deleteAccount(id));
+		        return;
+            }
+
 			let requestToken = OC.requestToken;
 			let tokenHeaders = { headers: { requesttoken: requestToken } };
 
@@ -142,6 +147,17 @@ export default {
 				});
 		},
 		addAccount() {
+		    if (this.newAccount.name === '') {
+                this.newAccount.error = true;
+                this.newAccount.errorMsg = t('moodle', 'You need to specify an existing user');
+                return;
+            }
+
+            if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+                OC.PasswordConfirmation.requirePasswordConfirmation(this.addAccount);
+                return;
+            }
+
 			let requestToken = OC.requestToken;
 			let tokenHeaders = { headers: { requesttoken: requestToken } };
 			this.newAccount.error = false;
