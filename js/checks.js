@@ -8,60 +8,11 @@
  *
  */
 
-var addSystemAccount = function () {
-    if ($('#moodle-systemaccounts #systemaccount-name').val() === '') {
-        return;
-    }
-
-    if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
-        OC.PasswordConfirmation.requirePasswordConfirmation(addSystemAccount);
-        return;
-    }
-
-    var _this = this;
-    //this._toggleAddingToken(true);
-
-    var accountID = $('#moodle-systemaccounts #systemaccount-name').val();
-    var systemaccount = $.ajax(OC.generateUrl('/apps/moodle/settings/addsystemaccount'), {
-        method: 'POST',
-        data: {
-            uid: accountID
-        }
-    });
-
-    $.when(systemaccount).done(function (resp) {
-        document.location.reload();
-    });
-    $.when(systemaccount).fail(function () {
-        OC.Notification.showTemporary(t('core', 'Error while adding system account'));
-    });
-    $.when(systemaccount).always(function () {
-        //_this._toggleAddingToken(false);
-    });
-}
-
-var removeSystemAccount = function (e) {
-    if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+/*    if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
         OC.PasswordConfirmation.requirePasswordConfirmation(removeSystemAccount.bind(this));
         return;
     }
-
-    var userId = $(this).data().userid;
-
-    var systemaccount = $.ajax(OC.generateUrl('/apps/moodle/settings/removesystemaccount'), {
-        method: 'POST',
-        data: {
-            uid: userId
-        }
-    });
-
-    $.when(systemaccount).done(function (resp) {
-        document.location.reload();
-    });
-    $.when(systemaccount).fail(function () {
-        OC.Notification.showTemporary(t('core', 'Error while adding system account'));
-    });
-}
+*/
 
 
 /**
@@ -69,17 +20,6 @@ var removeSystemAccount = function (e) {
  *
  */
 $(document).ready(function() {
-    var addAppPasswordBtn = $('#add-systemaccount');
-    addAppPasswordBtn.click(addSystemAccount);
-    var appPasswordName = $('#systemaccount-name');
-    appPasswordName.on('keypress', function(event) {
-        if (event.which === 13) {
-            addSystemAccount();
-        }
-    });
-    var removeEntryButtons = $('#moodle-systemaccounts input.remove');
-    removeEntryButtons.click(removeSystemAccount);
-
     var $el = $('#moodlechecks');
     $el.find('.loading').addClass('hidden');
     var deferred = $.Deferred();

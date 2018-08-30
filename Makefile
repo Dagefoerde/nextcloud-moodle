@@ -48,7 +48,7 @@ appstore_package_name=$(appstore_build_directory)/$(app_name)
 npm=$(shell which npm 2> /dev/null)
 composer=$(shell which composer 2> /dev/null)
 
-all: build
+all: dev-setup build
 
 # Fetches the PHP and JS dependencies and compiles the JS. If no composer.json
 # is present, the composer step is skipped, if no package.json or js/package.json
@@ -155,3 +155,23 @@ appstore:
 test: composer
 	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.xml
 	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.integration.xml
+
+dev-setup: clean clean-dev npm-init
+
+npm-init:
+	npm install
+
+npm-update:
+	npm update
+
+watch-js:
+	npm run watch
+
+clean:
+	rm -f js/moodle.js
+	rm -f js/moodle.js.map
+
+clean-dev:
+	rm -rf node_modules
+	rm -rf vendor
+

@@ -22,11 +22,14 @@
  */
 namespace OCA\Moodle\Controller;
 
+use OC_Helper;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\Files\NotFoundException;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
+use OCP\IUser;
 use OCP\IUserManager;
 
 class SystemAccountController extends Controller {
@@ -52,13 +55,12 @@ class SystemAccountController extends Controller {
         }
 
         $accounts = explode(',', $this->config->getAppValue('moodle', 'systemaccounts'));
-        if (!in_array($uid, $accounts)) {
-            $accounts[] = $uid;
+        if (in_array($uid, $accounts)) {
+            return new DataResponse(array('msg' => 'already a system account!'), Http::STATUS_NOT_FOUND);
         }
+        $accounts[] = $uid;
         $this->config->setAppValue('moodle', 'systemaccounts', implode(',', $accounts));
-        return new DataResponse([
-            'msg' => 'System account added successfully.'
-        ]);
+        return new DataResponse($this->formatAccount($user));
     }
 
     /**
@@ -66,15 +68,11 @@ class SystemAccountController extends Controller {
      * @return DataResponse
      */
     public function removeSystemAccount($uid) {
-        $user = $this->userManager->get($uid);
-        if ($user === null) {
-            return new DataResponse(array('msg' => 'not found!'), Http::STATUS_NOT_FOUND);
-        }
-
         $accounts = explode(',', $this->config->getAppValue('moodle', 'systemaccounts'));
         $newaccounts = array();
         // Keep all account except for the one to be dropped.
         foreach ($accounts as $account) {
+            if (empty($account)) continue;
             if ($account !== $uid) {
                 $newaccounts[] = $account;
             } else {
@@ -87,4 +85,77 @@ class SystemAccountController extends Controller {
             'msg' => 'System account removed successfully.'
         ]);
     }
+
+    /**
+     * @return DataResponse
+     */
+    public function getSystemAccounts() {
+        $setting = $this->config->getAppValue('moodle', 'systemaccounts');
+        if (empty($setting)) {
+            return new DataResponse([]);
+        }
+
+        $accounts = explode(',', $setting);
+        $formattedAccounts = array();
+        foreach ($accounts as $uid) {
+            if (empty($uid)) continue;
+
+            /** @var IUser $user */
+            $user = $this->userManager->get($uid);
+            if ($user === null) {
+                // TODO Issue a warning that the system account seems to have been deleted.
+                continue;
+            }
+
+            $formattedAccounts[] = $this->formatAccount($user);
+        }
+
+        return new DataResponse($formattedAccounts);
+    }
+
+    protected function formatAccount(IUser $user) {
+        $storageInfo = $this->getStorageInfo($user->getUID());
+
+        $formattedUser = array();
+        // User metadata.
+        $formattedUser['id'] = $user->getUID();
+        $formattedUser['userAvatarVersion'] = $this->config->getUserValue(\OC_User::getUser(), 'avatar', 'version', 0);
+
+        // Storage usage.
+        $formattedUser['usage'] = \OC_Helper::humanFileSize($storageInfo['used']);
+        if ($user->getQuota() === \OCP\Files\FileInfo::SPACE_UNLIMITED) {
+            $totalSpace = $this->l10n->t('Unlimited');
+        } else {
+            $totalSpace = \OC_Helper::humanFileSize($storageInfo['total']);
+        }
+        $formattedUser['total_space'] = $totalSpace;
+        $formattedUser['quota'] = $storageInfo['quota'];
+        $formattedUser['usage_relative'] = $storageInfo['relative'];
+
+        return $formattedUser;
+    }
+
+    /**
+     * @param string $userId
+     * @return array
+     */
+    protected function getStorageInfo($userId) {
+        try {
+            \OC_Util::tearDownFS();
+            \OC_Util::setupFS($userId);
+            $storage = OC_Helper::getStorageInfo('/');
+            $data = [
+                'free' => $storage['free'],
+                'used' => $storage['used'],
+                'total' => $storage['total'],
+                'relative' => $storage['relative'],
+                'quota' => $storage['quota'],
+            ];
+            \OC_Util::tearDownFS();
+        } catch (NotFoundException $ex) {
+            $data = [];
+        }
+        return $data;
+    }
+
 }

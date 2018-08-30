@@ -12,5 +12,6 @@ return [
         ['name' => 'CheckSetup#checkSupportsBearerToken', 'url' => '/settings/checksupportsbearertoken', 'verb' => 'GET'],
         ['name' => 'SystemAccount#addSystemAccount', 'url' => '/settings/addsystemaccount', 'verb' => 'POST'],
         ['name' => 'SystemAccount#removeSystemAccount', 'url' => '/settings/removesystemaccount', 'verb' => 'POST'],
+        ['name' => 'SystemAccount#getSystemAccounts', 'url' => '/settings/systemaccounts', 'verb' => 'GET'],
     ]
 ];
