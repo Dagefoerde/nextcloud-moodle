@@ -119,7 +119,7 @@ class SystemAccountController extends Controller {
         $formattedUser = array();
         // User metadata.
         $formattedUser['id'] = $user->getUID();
-        $formattedUser['userAvatarVersion'] = $this->config->getUserValue(\OC_User::getUser(), 'avatar', 'version', 0);
+        $formattedUser['avatar_version'] = $this->config->getUserValue(\OC_User::getUser(), 'avatar', 'version', 0);
 
         // Storage usage.
         $formattedUser['usage'] = \OC_Helper::humanFileSize($storageInfo['used']);

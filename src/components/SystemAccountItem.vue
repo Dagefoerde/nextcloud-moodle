@@ -22,8 +22,8 @@
 <template>
     <tr>
         <td class="avatar">
-            <div class="avatardiv">
-            </div>
+            <img alt="" width="32" height="32" :src="generateAvatar(id, avatar_version, 32)"
+                 :srcset="generateAvatar(id, avatar_version, 64)+' 2x, '+generateAvatar(id, avatar_version, 128)+' 4x'">
         </td>
         <th class="name" scope="row">{{id}}</th>
 
@@ -57,6 +57,7 @@ export default {
                 usage: this.account.usage,
                 total_space: this.account.total_space,
                 usage_relative: this.account.usage_relative,
+                avatar_version: this.account.avatar_version,
 			};
 	},
 	computed: {
@@ -86,6 +87,25 @@ export default {
         },
 	},
 	methods: {
+
+        /**
+         * Generate avatar url
+         *
+         * @param {string} user The user name
+         * @param {int} version User's avatar version
+         * @param {int} size Size integer, default 32
+         * @returns {string}
+         */
+        generateAvatar(user, version, size=32) {
+            return OC.generateUrl(
+                '/avatar/{user}/{size}?v={version}',
+                {
+                    user: user,
+                    size: size,
+                    version: version
+                }
+            );
+        },
 	}
 }
 </script>
