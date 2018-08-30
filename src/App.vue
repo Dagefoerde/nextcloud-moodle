@@ -25,16 +25,18 @@
         <h2 class="inlineblock">{{ t('moodle', 'Moodle Integration Settings') }}</h2>
         <p class="settings-hint">{{ t('moodle', 'Integrating Moodle with Nextcloud requires some configuration on the Nextcloud end. The following reports any configuration mistakes found.') }}</p>
         <div id="moodlechecks">
-            <div class="loading"></div>
-            <ul class="errors hidden"></ul>
-            <ul class="warnings hidden"></ul>
-            <ul class="info hidden"></ul>
-            <ul class="allgood hidden">
-                <li>
-                    <span class="ui-icon icon-checkmark-color"></span>
-                    {{ t('moodle', 'No issues found. The integration is ready to go.') }}
-                </li>
-            </ul>
+            <div class="loading" v-if="!checkLoaded"></div>
+            <span v-else>
+                <ul class="errors" v-if="this.errors.length > 0">
+                    <li v-for="error in errors" v-html="error"></li>
+                </ul>
+                <ul class="allgood" v-if="this.errors.length === 0">
+                    <li>
+                        <span class="ui-icon icon-checkmark-color"></span>
+                        {{ t('moodle', 'No issues found. The integration is ready to go.') }}
+                    </li>
+                </ul>
+            </span>
         </div>
     </div>
     <div id="moodle-systemaccounts" class="section">
@@ -81,6 +83,8 @@ export default {
 	},
 	data: function() {
 		return {
+		    checkLoaded: false,
+		    errors: [],
 			accounts: [],
 			newAccount: {
 				name: '',
@@ -97,9 +101,32 @@ export default {
 			.then((response) => {
 			this.accounts = response.data;
 		});
-
-		// TODO run checks.
 	},
+    mounted: function() {
+        let requestHeaders = { headers:
+                {
+                    requesttoken: OC.requestToken,
+                    Authentication: 'Bearer xyz'
+                } };
+
+        axios.get(OC.generateUrl('/apps/moodle/settings/checksupportsbearertoken'), requestHeaders)
+            .then((response) => {
+                let messages = [];
+                if (response.status === 200 && response.data) {
+                    if (!response.data.supportsBearerToken) {
+                        this.errors.push(
+                            t('moodle', 'Bearer authentication token was not received. Likely, <code>mod_headers</code> is missing or misconfigured.')
+                        );
+                    }
+                } else {
+                    this.errors.push(
+                        t('core', 'Error occurred while checking server setup')
+                    );
+                }
+                this.checkLoaded = true;
+
+            });
+    },
 	methods: {
 		deleteAccount(id) {
 			let requestToken = OC.requestToken;

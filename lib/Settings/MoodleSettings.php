@@ -53,68 +53,8 @@ class MoodleSettings implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
-        $formattedSystemAccounts = array();
-        $accounts = explode(',', $this->config->getAppValue('moodle', 'systemaccounts'));
-        foreach ($accounts as $uid) {
-            /** @var IUser $user */
-            $user = $this->userManager->get($uid);
-            if ($user === null) {
-                // TODO Issue a warning that the system account seems to have been deleted.
-                continue;
-            }
-            $storageInfo = $this->getStorageInfo($uid);
-
-            $formattedUser = array();
-            // User metadata.
-            $formattedUser['id'] = $uid;
-            $formattedUser['userAvatarVersion'] = $this->config->getUserValue(\OC_User::getUser(), 'avatar', 'version', 0);
-
-            // Storage usage.
-            $formattedUser['usage'] = \OC_Helper::humanFileSize($storageInfo['used']);
-            if ($user->getQuota() === \OCP\Files\FileInfo::SPACE_UNLIMITED) {
-                $totalSpace = $this->l10n->t('Unlimited');
-            } else {
-                $totalSpace = \OC_Helper::humanFileSize($storageInfo['total']);
-            }
-            $formattedUser['total_space'] = $totalSpace;
-            $formattedUser['quota'] = $storageInfo['quota'];
-            $formattedUser['usage_relative'] = $storageInfo['relative'];
-
-            $formattedSystemAccounts[] = $formattedUser;
-        }
-
-
-		$parameters = [
-		    'accounts' => $formattedSystemAccounts,
-			//'send_invitations' => $this->config->getAppValue('dav', 'sendInvitations', 'yes'),
-			//'generate_birthday_calendar' => $this->config->getAppValue('dav', 'generateBirthdayCalendar', 'yes'),
-		];
-
-		return new TemplateResponse('moodle', 'settings/index', $parameters, '');
+		return new TemplateResponse('moodle', 'settings/index', [], '');
 	}
-
-    /**
-     * @param string $userId
-     * @return array
-     */
-    protected function getStorageInfo($userId) {
-        try {
-            \OC_Util::tearDownFS();
-            \OC_Util::setupFS($userId);
-            $storage = OC_Helper::getStorageInfo('/');
-            $data = [
-                'free' => $storage['free'],
-                'used' => $storage['used'],
-                'total' => $storage['total'],
-                'relative' => $storage['relative'],
-                'quota' => $storage['quota'],
-            ];
-            \OC_Util::tearDownFS();
-        } catch (NotFoundException $ex) {
-            $data = [];
-        }
-        return $data;
-    }
 
 	/**
 	 * @return string

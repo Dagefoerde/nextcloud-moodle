@@ -87,7 +87,7 @@ $(document).ready(function() {
             $infoEl.removeClass('hidden');
             hasMessages = true;
         }
-        if (errorsCount + warningsCount + infoCount === 0) {
+        if (hasMessages) {
             $el.find('.allgood').removeClass('hidden');
         }
     });
