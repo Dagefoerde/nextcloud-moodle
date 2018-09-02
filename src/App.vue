@@ -133,6 +133,11 @@ export default {
                             t('moodle', 'At <code>Administration &gt; Sharing</code>, disable enforcement of the expiration date.')
                         );
                     }
+                    if (!response.data.validClients.length) {
+                        this.errors.push(
+                            t('moodle', 'You need to configure a valid OAuth 2 client for Moodle. Check that its redirection URI ends with <code>/admin/oauth2callback.php</code>.')
+                        );
+                    }
                 } else {
                     this.errors.push(
                         t('core', 'Error occurred while checking server setup')

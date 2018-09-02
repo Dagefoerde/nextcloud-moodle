@@ -22,6 +22,7 @@
  */
 namespace OCA\Moodle\Controller;
 
+use OCA\OAuth2\Db\ClientMapper;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
 use OCP\IRequest;
@@ -33,11 +34,20 @@ class CheckSetupController extends Controller {
      * @var IConfig
      */
     private $config;
+    /**
+     * @var ClientMapper
+     */
+    private $clientMapper;
 
-	public function __construct($AppName, IRequest $request, $UserId){
+    public function __construct($AppName,
+                                IConfig $config,
+                                ClientMapper $clientMapper,
+                                IRequest $request,
+                                $UserId){
 		parent::__construct($AppName, $request);
 		$this->userId = $UserId;
         $this->config = $config;
+        $this->clientMapper = $clientMapper;
     }
 
     /**
@@ -56,20 +66,31 @@ class CheckSetupController extends Controller {
         $response['shareExpirationNotEnforced'] = $settings['publicSharesExpire'] === 'no' ||
             $settings['publicSharesExpireEnforced'] === 'no';
 
+        // Check that at least one configured OAuth client's URI ends with /admin/oauth2callback.php.
+        $validClients = array();
+        $clients = $this->clientMapper->getClients();
+        $expectedEnding = '/admin/oauth2callback.php';
+        foreach ($clients as $client) {
+            if (mb_substr($client->getRedirectUri(), -mb_strlen($expectedEnding)) === $expectedEnding) {
+                $validClients[] = $client->getName();
+            } else {
+                // Client not compatible.
+            }
+        }
+        $response['validClients'] = $validClients;
+
         // Check is Nextcloud over https?
         // -> Client-side check.
 
         // Check whether header is dropped.
         if (isset($_SERVER['HTTP_AUTHENTICATION']) &&
             $_SERVER['HTTP_AUTHENTICATION'] === 'Bearer xyz') {
-            return new DataResponse($response + [
-                'supportsBearerToken' => true,
-                ]);
+             $response['supportsBearerToken'] = true;
+        } else {
+            // Bearer authentication token was not transmitted.
+            $response['supportsBearerToken'] = false;
         }
-        // Bearer authentication token was not transmitted.
-        return new DataResponse($response + [
-                'supportsBearerToken' => false,
-                ]);
+        return new DataResponse($response);
     }
 
 }
