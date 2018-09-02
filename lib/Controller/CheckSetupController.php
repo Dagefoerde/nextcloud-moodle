@@ -23,29 +23,51 @@
 namespace OCA\Moodle\Controller;
 
 use OCP\AppFramework\Http\DataResponse;
+use OCP\IConfig;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 
 class CheckSetupController extends Controller {
 	private $userId;
+    /**
+     * @var IConfig
+     */
+    private $config;
 
 	public function __construct($AppName, IRequest $request, $UserId){
 		parent::__construct($AppName, $request);
 		$this->userId = $UserId;
-	}
+        $this->config = $config;
+    }
 
     /**
      * @return DataResponse
      */
     public function checkSupportsBearerToken() {
+        $response = array();
+        // Check basic sharing settings.
+        $settings = [
+            'publicSharesEnabled' => $this->config->getAppValue('core', 'shareapi_enabled', 'yes'),
+            'publicSharesExpire' => $this->config->getAppValue('core', 'shareapi_default_expire_date', 'no'),
+            'publicSharesExpireEnforced' => $this->config->getAppValue('core', 'shareapi_enforce_expire_date', 'no'),
+        ];
+        $response['sharingEnabled'] = $settings['publicSharesEnabled'] === 'yes';
+        $response['sharesNeverExpire'] = $settings['publicSharesExpire'] === 'no'; // Unless #10178 resolved.
+        $response['shareExpirationNotEnforced'] = $settings['publicSharesExpire'] === 'no' ||
+            $settings['publicSharesExpireEnforced'] === 'no';
+
+        // Check is Nextcloud over https?
+        // -> Client-side check.
+
+        // Check whether header is dropped.
         if (isset($_SERVER['HTTP_AUTHENTICATION']) &&
             $_SERVER['HTTP_AUTHENTICATION'] === 'Bearer xyz') {
-            return new DataResponse([
+            return new DataResponse($response + [
                 'supportsBearerToken' => true,
                 ]);
         }
         // Bearer authentication token was not transmitted.
-        return new DataResponse([
+        return new DataResponse($response + [
                 'supportsBearerToken' => false,
                 ]);
     }

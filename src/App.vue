@@ -111,11 +111,26 @@ export default {
 
         axios.get(OC.generateUrl('/apps/moodle/settings/checksupportsbearertoken'), requestHeaders)
             .then((response) => {
-                let messages = [];
                 if (response.status === 200 && response.data) {
                     if (!response.data.supportsBearerToken) {
                         this.errors.push(
                             t('moodle', 'Bearer authentication token was not received. Likely, <code>mod_headers</code> is missing or misconfigured.')
+                        );
+                    }
+                    if (!response.data.sharingEnabled) {
+                        this.errors.push(
+                            t('moodle', 'At <code>Administration &gt; Sharing</code>, allow users to share via link.')
+                        );
+                    }
+                    if (!response.data.sharesNeverExpire) {
+                        this.errors.push(
+                            t('moodle', 'At <code>Administration &gt; Sharing</code>, disable the default expiration date.')
+                            // TODO add: This is a workaround!
+                        );
+                    }
+                    if (!response.data.shareExpirationNotEnforced) {
+                        this.errors.push(
+                            t('moodle', 'At <code>Administration &gt; Sharing</code>, disable enforcement of the expiration date.')
                         );
                     }
                 } else {
@@ -123,6 +138,14 @@ export default {
                         t('core', 'Error occurred while checking server setup')
                     );
                 }
+
+                // Check whether access is via HTTPS.
+                if(OC.getProtocol() !== 'https') {
+                    this.errors.push(
+                        t('moodle', 'The server must be accessed via HTTPS. For security reasons, Moodle refuses to connect to an unencrypted server.')
+                    )
+                }
+
                 this.checkLoaded = true;
 
             });
